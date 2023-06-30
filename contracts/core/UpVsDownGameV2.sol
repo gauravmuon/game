@@ -205,6 +205,7 @@ contract UpVsDownGameV2 is Ownable {
   address public feeAddress = msg.sender;
   bool public isRunning;
   bytes public notRunningReason;
+  string public asset;
 
   // Errors
 
@@ -243,8 +244,9 @@ contract UpVsDownGameV2 is Ownable {
     _;
   }
 
-  constructor(address newGameController) {
+  constructor(address newGameController, string memory _asset) {
     gameController = newGameController;
+    asset = _asset;
   }
 
   // Methods
@@ -431,6 +433,7 @@ contract UpVsDownGameV2 is Ownable {
     string countryCode;
     bool upOrDown;
     string whiteLabelId;
+    address trader;
   }
 
   struct userDataStruct{
@@ -470,8 +473,8 @@ contract UpVsDownGameV2 is Ownable {
     userTradeData.whiteLabelId = userTrade.whiteLabelId;
     userTradeData.roundStartTime = pools[userTrade.poolId].roundStartTime;
     
-    emit TradePlaced(userTrade.poolId, msg.sender, msg.value, (userTrade.upOrDown) ? "UP":"DOWN", newTotal, 
-    userTrade.poolId, msg.sender, userTradeData.avatar, userTradeData.countryCode, 
+    emit TradePlaced(userTrade.poolId, userTrade.trader, msg.value, (userTrade.upOrDown) ? "UP":"DOWN", newTotal, 
+    userTrade.poolId, userTrade.trader, userTradeData.avatar, userTradeData.countryCode, 
     userTradeData.roundStartTime, userTradeData.whiteLabelId);
   }
 
