@@ -14,11 +14,8 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
  */
 contract Router is AccessControl, IRouter {
     using SafeERC20 for ERC20;
-    uint16 MAX_DELAY_FOR_OPEN_TRADE = 1 minutes;
-    uint16 MAX_DELAY_FOR_ASSET_PRICE = 1 minutes;
 
     address public publisher;
-    address public sfPublisher;
     address public admin;
     bool public isInPrivateKeeperMode = true;
 
@@ -27,11 +24,9 @@ contract Router is AccessControl, IRouter {
     mapping(address => bool) public isKeeper;
     mapping(address => AccountMapping) public accountMapping;
     mapping(bytes => bool) public prevSignature;
-    mapping(address => mapping(uint256 => uint256)) public optionIdMapping;
 
-    constructor(address _publisher, address _sfPublisher, address _admin) {
+    constructor(address _publisher, address _admin) {
         publisher = _publisher;
-        sfPublisher = _sfPublisher;
         admin = _admin;
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
