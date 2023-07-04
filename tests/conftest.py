@@ -21,6 +21,22 @@ def isolate(fn_isolation):
     # https://eth-brownie.readthedocs.io/en/v1.10.3/tests-pytest-intro.html#isolation-fixtures
     pass
 
+@pytest.fixture(scope="module")
+def upVsDownGameV2(UpVsDownGameV2, accounts):
+    # address 0 will be owner ie (msg.sender), and 1 will be admin
+    return UpVsDownGameV2.deploy(accounts[1], "UpVsDownGameV2", {'from': accounts[0]})
+    
+@pytest.fixture(scope="module")
+def router(Router, accounts):
+    return Router.deploy(accounts[1], accounts[0], {'from': accounts[0]})
+
+@pytest.fixture
+def ether():
+   return 1e18
+
+@pytest.fixture
+def irrevelent_num():
+   return 1
 
 @pytest.fixture(scope="module")
 def contracts(
