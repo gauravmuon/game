@@ -4,7 +4,6 @@ pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../interfaces/Interfaces.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
@@ -13,7 +12,6 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
  * @notice Buffer Options Router Contract
  */
 contract Router is AccessControl, IRouter {
-    using SafeERC20 for ERC20;
 
     address public publisher;
     address public admin;
@@ -130,14 +128,6 @@ contract Router is AccessControl, IRouter {
     ) public {
         _validateKeeper();
         IUpVsDownGame gameContract = IUpVsDownGame(targetContract);
-        gameContract.trigger(
-            poolId,
-            timeMS,
-            tradesStartTimeMS,
-            tradesEndTimeMS,
-            price,
-            batchSize
-        );
         bytes32 hashData = keccak256(
             abi.encodePacked(
                 gameContract.asset(),
@@ -151,6 +141,14 @@ contract Router is AccessControl, IRouter {
         if (!_validate(hashData, publisherSignature, publisher)) {
             emit FailUnlock(targetContract, "Router: Signature didn't match");
         }
+        gameContract.trigger(
+            poolId,
+            timeMS,
+            tradesStartTimeMS,
+            tradesEndTimeMS,
+            price,
+            batchSize
+        );
     }
 
     /************************************************
