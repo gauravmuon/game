@@ -14,6 +14,7 @@ class OptionType(IntEnum):
     CALL = 2
     NONE = 3
 
+ASSET_NAME = "UpVsDownGameV2"
 
 @pytest.fixture(scope="function", autouse=True)
 def isolate(fn_isolation):
@@ -24,7 +25,7 @@ def isolate(fn_isolation):
 @pytest.fixture(scope="module")
 def upVsDownGameV2(UpVsDownGameV2, accounts):
     # address 0 will be owner ie (msg.sender), and 1 will be admin
-    return UpVsDownGameV2.deploy(accounts[1], "UpVsDownGameV2", {'from': accounts[0]})
+    return UpVsDownGameV2.deploy(accounts[1], ASSET_NAME, {'from': accounts[0]})
     
 @pytest.fixture(scope="module")
 def router(Router, accounts):
@@ -53,6 +54,10 @@ def KEEPER(accounts):
 @pytest.fixture
 def irrevelent_num():
    return 1
+
+@pytest.fixture
+def asset_name():
+   return ASSET_NAME
 
 @pytest.fixture(scope="module")
 def contracts(

@@ -12,7 +12,6 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
  * @notice Buffer Options Router Contract
  */
 contract Router is AccessControl, IRouter {
-
     address public publisher;
     address public admin;
     bool public isInPrivateKeeperMode = true;
@@ -131,7 +130,6 @@ contract Router is AccessControl, IRouter {
         bytes32 hashData = keccak256(
             abi.encodePacked(
                 gameContract.asset(),
-                publisherSignature,
                 publisherSignatureTimestamp,
                 price,
                 publisher

@@ -9,11 +9,12 @@ import helpers
 
 # private function should not exist
 # accessing them must produce attribute error
-def test_game_trigger(upVsDownGameV2, router, accounts, ether, irrevelent_num, ADMIN, KEEPER, DEFAULT_ADMIN):
+def test_game_trigger(upVsDownGameV2, router, accounts, ether, 
+                      irrevelent_num, ADMIN, KEEPER, DEFAULT_ADMIN, asset_name):
 
   PUBLISHER = OWNER = DEFAULT_ADMIN
 
-  helpers.start_game_and_create_pool(upVsDownGameV2, ether, ADMIN, DEFAULT_ADMIN)
+  round_init = helpers.start_game_and_create_pool(upVsDownGameV2, ether, ADMIN, DEFAULT_ADMIN)
 
   router.setContractRegistry(upVsDownGameV2.address, True, {"from":accounts[0]})
   router.setKeeper(KEEPER, True, {"from":DEFAULT_ADMIN})
@@ -28,14 +29,15 @@ def test_game_trigger(upVsDownGameV2, router, accounts, ether, irrevelent_num, A
     "timeMS": time.time_ns(),
     "tradesStartTimeMS": time.time_ns() + 10_000,
     "tradesEndTimeMS": time.time_ns() + 20_000,
+    "publisherSignatureTimestamp": time.time(),
     "price": 11,
     "batchSize": 11,
     "targetContract": 11,
   }
 
   trade_1_msg = brownie.web3.solidityKeccak(
-    ["string",""],
-    list(trigger_params.values())
+    ["string","uint256","int32","string"],
+    [asset_name,trigger_params["publisherSignatureTimestamp"],trigger_params["price"], PUBLISHER.address]
   )
 
   trade_1_sign = Account.sign_message(encode_defunct(trade_1_msg), TRADER_1.private_key)
