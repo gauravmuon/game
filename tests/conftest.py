@@ -35,6 +35,22 @@ def ether():
    return 1e18
 
 @pytest.fixture
+def DEFAULT_ADMIN(accounts):
+   return accounts[0]
+
+@pytest.fixture
+def PUBLISHER(accounts):
+   return accounts[0]
+
+@pytest.fixture
+def ADMIN(accounts):
+   return accounts[1]
+
+@pytest.fixture
+def KEEPER(accounts):
+   return accounts[2]
+
+@pytest.fixture
 def irrevelent_num():
    return 1
 
